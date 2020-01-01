@@ -11,3 +11,5 @@
 - Billed Duration: 5000 ms for both sync/async cases. 77 MB Init Duration: 258.77 ms
 
 > Is not easy to save time and money with Python and Lambda, is a coding or an SDK issue?
+
+> See Go implementation comparison results at: https://github.com/nick-uk/Go-Lambda-Cloudwatch/blob/master/README.md
