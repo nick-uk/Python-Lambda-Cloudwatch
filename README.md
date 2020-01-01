@@ -1,7 +1,7 @@
 # Python demo with AWS SDK
 
 ## What is the repository for?
-#### This is a Lambda function to work as REST API with API Gateway for demo and performance comparison reasons.
+#### This is a quick Lambda function PoC to work as REST API with API Gateway for demo and performance comparison reasons.
 
 > Generates a JSON output with CPU load peak, Networking IN peak activity and averages/total calculation for the last 3 days for anomaly detection tasks. 
 
