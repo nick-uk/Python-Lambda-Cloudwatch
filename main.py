@@ -11,7 +11,7 @@ aws cloudwatch get-metric-statistics --namespace "AWS/EC2" \
     --metric-name CPUUtilization \
     --start-time $(date -v-1d -u +"%Y-%m-%dT%H:%M:%SZ") \
     --end-time $(date -u +"%Y-%m-%dT%H:%M:%SZ") --period 300 --namespace AWS/EC2 --statistics Average \
-    --dimensions Name=AutoScalingGroupName,Value=managers-ag
+    --dimensions Name=AutoScalingGroupName,Value=nano-ag
 """
 
 
@@ -22,7 +22,7 @@ async def getCPU(client):
         Dimensions=[
             {
                 'Name': 'AutoScalingGroupName',
-                'Value': 'managers-ag'
+                'Value': 'nano-ag'
             },
         ],
         StartTime=datetime.utcnow() - timedelta(days=3),
@@ -60,7 +60,7 @@ async def getNET(client):
         Dimensions=[
             {
                 'Name': 'AutoScalingGroupName',
-                'Value': 'managers-ag'
+                'Value': 'nano-ag'
             },
         ],
         StartTime=datetime.utcnow() - timedelta(days=3),
@@ -100,16 +100,14 @@ def lambda_handler(event, context):
 
     # Well, not easy to save time and money with Python or is a SDK issue?
     # With or without async execution duration is similar (?!)
-    # Billed Duration: 5400 ms, Memory Size: 128 MB, Max Memory Used: 78 MB, Init Duration: 284.17 ms
+    # Billed Duration: 4900 ms, Memory Size: 128 MB, Max Memory Used: 78 MB, Init Duration: 282.25 ms
     loop = asyncio.new_event_loop()
-    coroutine1 = getCPU(client)
-    coroutine2 = getNET(client)
-    task1 = loop.create_task(coroutine1)
-    task2 = loop.create_task(coroutine2)
+    task1 = loop.create_task(getCPU(client))
+    task2 = loop.create_task(getNET(client))
     loop.run_until_complete(asyncio.wait([task1, task2]))
     loop.close()
-
     response = {'CPU': task1.result(), 'NET': task2.result()}
+
     return {
         "statusCode": 200,
         "body": json.dumps(response)
