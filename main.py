@@ -15,7 +15,7 @@ aws cloudwatch get-metric-statistics --namespace "AWS/EC2" \
 """
 
 
-async def getCPU(client):
+def getCPU(client):
     response = client.get_metric_statistics(
         Namespace='AWS/EC2',
         MetricName='CPUUtilization',
@@ -53,7 +53,7 @@ async def getCPU(client):
     }
 
 
-async def getNET(client):
+def getNET(client):
     response = client.get_metric_statistics(
         Namespace='AWS/EC2',
         MetricName='NetworkIn',
@@ -100,6 +100,8 @@ def lambda_handler(event, context):
 
     # Well, not easy to save time and money with Python or is a SDK issue?
     # With or without async execution duration is similar (?!)
+    """
+    # ASYNC
     # Billed Duration: 4900 ms, Memory Size: 128 MB, Max Memory Used: 78 MB, Init Duration: 282.25 ms
     loop = asyncio.new_event_loop()
     task1 = loop.create_task(getCPU(client))
@@ -107,6 +109,13 @@ def lambda_handler(event, context):
     loop.run_until_complete(asyncio.wait([task1, task2]))
     loop.close()
     response = {'CPU': task1.result(), 'NET': task2.result()}
+    """
+
+    # SYNC
+    # Billed Duration: 4900 ms, Memory Size: 128 MB, Max Memory Used: 78 MB, Init Duration: 272.44 ms
+    cpures = getCPU(client)
+    netres = getNET(client)
+    response = {'CPU': cpures, 'NET': netres}
 
     return {
         "statusCode": 200,
