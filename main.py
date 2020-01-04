@@ -99,8 +99,8 @@ def lambda_handler(event, context):
     client = boto3.client('cloudwatch')
 
     # Well, not easy to save time and money with Python or is a SDK issue?
-    # With or without async execution duration is the same around 4900 ms (?!)
-    # Billed Duration: 5000 ms for both sync/async cases. 77 MB Init Duration: 258.77 ms
+    # With or without async execution duration is similar (?!)
+    # Billed Duration: 5400 ms, Memory Size: 128 MB, Max Memory Used: 78 MB, Init Duration: 284.17 ms
     loop = asyncio.new_event_loop()
     coroutine1 = getCPU(client)
     coroutine2 = getNET(client)

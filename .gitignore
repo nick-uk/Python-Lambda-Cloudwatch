@@ -127,3 +127,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+make
+deploy.tf
+.terraform
+terraform.*
+NOTES
+package
